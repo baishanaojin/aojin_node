@@ -1,9 +1,27 @@
 var express = require('express');
 var router = express.Router();
 var model = require('../model');
+var multiparty = require('multiparty');
+var fs = require('fs');
 
 router.post('/add',function(req,res,next){
     var id = parseInt(req.body.id);
+    var form = new multiparty.Form();
+    form.parse(req, function(err,fields,files){
+        if(err){
+            console.log('上传失败！',err);
+        }else{
+            console.log(files.logo[0].originalFilename);
+            var file = files.logo[0];
+            var rs = fs.createReadStream(file.path);
+            var newpath = '/uploads/' + file.originalFilename;
+            var ws = fs.createWriteStream('./public' + newpath);
+            rs.pipe(ws);
+            ws.on('close',function(){
+                console.log('文件上传成功！');
+            })
+        }
+    })
     if(id){//编辑
         var page = req.body.page;
         var title = req.body.title;

@@ -58,8 +58,25 @@ router.get('/write',function(req, res, next){
       })
     })
   }else{ //新增页面
+    
     res.render('write',{username: username,item: item});
   }
 })
 
+//详情页面
+router.get('/detail',function(req,res,next){
+  var username = req.session.username;
+  var id = parseInt(req.query.id);
+  model.connect(function(db){
+    db.collection('articles').findOne({id: id},function(err,docs){
+      if(err){
+        console.log('查询失败！',err);
+      }else{
+        var item = docs;
+        item['time'] = moment(item.id).format('YYYY-MM-DD HH:mm:ss');
+        res.render('detail',{item: item,username: username});
+      }
+    })
+  })
+})
 module.exports = router;

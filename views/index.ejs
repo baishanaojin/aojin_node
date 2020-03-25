@@ -21,7 +21,7 @@
       <div>
         <span><%= index + 1 %></span>
         <span><%= item.username%></span>
-        <span><%= item.title%></span>
+        <span><a href="/detail?id=<%= item.id%>"><%= item.title%></a></span>
         <span><%= item.time%></span>
         <span>
           <a href="/write?id=<%= item.id%>&page=<%= data.curPage %>">编辑</a>
